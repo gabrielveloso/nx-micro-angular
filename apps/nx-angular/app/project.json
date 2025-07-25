@@ -1,28 +1,31 @@
 {
-  "name": "nx-angular",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "app",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "apps/nx-angular/src",
+  "sourceRoot": "apps/nx-angular/app/src",
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@nx/angular:webpack-browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/nx-angular",
-        "index": "apps/nx-angular/src/index.html",
-        "main": "apps/nx-angular/src/main.ts",
+        "outputPath": "dist/apps/nx-angular/app",
+        "index": "apps/nx-angular/app/src/index.html",
+        "main": "apps/nx-angular/app/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "apps/nx-angular/tsconfig.app.json",
+        "tsConfig": "apps/nx-angular/app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/nx-angular/public"
+            "input": "apps/nx-angular/app/public"
           }
         ],
-        "styles": ["apps/nx-angular/src/styles.scss"]
+        "styles": ["apps/nx-angular/app/src/styles.scss"],
+        "customWebpackConfig": {
+          "path": "apps/nx-angular/app/webpack.config.ts"
+        }
       },
       "configurations": {
         "production": {
@@ -38,7 +41,10 @@
               "maximumError": "8kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/nx-angular/app/webpack.prod.config.ts"
+          }
         },
         "development": {
           "buildOptimizer": false,
@@ -53,13 +59,17 @@
     },
     "serve": {
       "continuous": true,
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@nx/angular:module-federation-dev-server",
+      "options": {
+        "port": 4200,
+        "publicHost": "http://localhost:4200"
+      },
       "configurations": {
         "production": {
-          "buildTarget": "nx-angular:build:production"
+          "buildTarget": "app:build:production"
         },
         "development": {
-          "buildTarget": "nx-angular:build:development"
+          "buildTarget": "app:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -67,17 +77,25 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "buildTarget": "nx-angular:build"
+        "buildTarget": "app:build"
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint"
     },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/nx-angular/app/jest.config.ts"
+      }
+    },
     "serve-static": {
       "continuous": true,
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "nx-angular:build",
+        "buildTarget": "app:build",
+        "port": 4200,
         "spa": true
       }
     }
