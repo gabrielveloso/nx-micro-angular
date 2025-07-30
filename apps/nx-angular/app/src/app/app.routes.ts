@@ -1,4 +1,4 @@
-import { NxWelcome } from './nx-welcome';
+import { ButtonsComponent } from './buttons';
 import { Route } from '@angular/router';
 
 export const appRoutes: Route[] = [
@@ -8,6 +8,6 @@ export const appRoutes: Route[] = [
   },
   {
     path: '',
-    component: NxWelcome,
+    component: ButtonsComponent,
   },
 ];
