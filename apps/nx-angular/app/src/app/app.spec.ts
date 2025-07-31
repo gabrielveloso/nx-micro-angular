@@ -1,15 +1,15 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { App } from './app';
-import { NxWelcome } from './nx-welcome';
 import { Router, RouterModule } from '@angular/router';
+import { ButtonsComponent } from './buttons';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterModule.forRoot([{ path: '', component: NxWelcome }]),
+        RouterModule.forRoot([{ path: '', component: ButtonsComponent }]),
         App,
-        NxWelcome,
+        ButtonsComponent,
       ],
     }).compileComponents();
   });
@@ -33,6 +33,6 @@ describe('App', () => {
     tick();
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Welcome app');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Host app - Counter value');
   }));
 });
